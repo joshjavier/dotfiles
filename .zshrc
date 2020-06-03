@@ -130,10 +130,6 @@ unset __conda_setup
 # Add mpv-plugin-extract to $PATH
 export PATH="$HOME/bin/mpv-plugin-excerpt:$PATH"
 
-# Resolve "No GitHub API authentication" error
-export JEKYLL_GITHUB_TOKEN=834c3d4fc56a400ea9819def8b2b7a0222bd13c3
-export SSL_CERT_FILE=$HOME/Projects/cacert.pem
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
