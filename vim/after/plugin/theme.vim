@@ -1,8 +1,15 @@
-" Fix terminal-specific issues for gruvbox
-" https://github.com/gruvbox-community/gruvbox/wiki/Terminal-specific
-if !has('gui_running')
-  let g:gruvbox_italic=1
-  set termguicolors
-endif
+set background=dark
+silent! colorscheme gruvbox
 
-colorscheme gruvbox
+if !has('gui_running')
+
+  " Enable background transparency
+  " Note: To properly override highlight groups, this must be placed AFTER
+  " the setting of the colorscheme and background options (see `:help 'bg'`).
+  highlight Normal guibg=NONE
+
+  " Add a subtle guide to encourage lines to be 80 characters or less
+  set colorcolumn=80
+  highlight ColorColumn guibg=#282828
+
+endif
