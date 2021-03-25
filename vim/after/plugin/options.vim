@@ -11,12 +11,14 @@ set list
 " Highlight current line
 set cursorline
 
-" More intuitive window splitting and navigation
+" More intuitive window splitting
 set splitbelow splitright
-nnoremap <c-j> <c-W>j
-nnoremap <c-k> <c-W>k
-nnoremap <c-h> <c-W>h
-nnoremap <c-l> <c-W>l
 
 " Gentler sidescrolling
 set sidescroll=1
+
+" Do not break words when wrap is on
+set linebreak
+
+" netrw tree style listing
+let g:netrw_liststyle=3

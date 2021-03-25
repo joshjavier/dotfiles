@@ -14,6 +14,8 @@ inoremap jk <esc>
 inoremap kj <esc>
 vnoremap jk <esc>
 vnoremap kj <esc>
+" TODO: 2021-03-25 There's a slight delay when pressing j/k to move up/down
+" while in visual mode. Might wanna check the timeout option.
 
 " ctrl-s to save
 nnoremap <c-s> :w<cr>
@@ -21,7 +23,7 @@ nnoremap <c-s> :w<cr>
 " Edit and source config files
 nnoremap <leader>ev :vsplit ~/.dotfiles/vim/init.vim<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-nnoremap <leader>ek :vsplit ~/.dotfiles/vim/after/plugin/key_bindings.vim<cr>
+nnoremap <leader>ek :vsplit ~/.dotfiles/vim/after/plugin/keybindings.vim<cr>
 nnoremap <leader>eo :vsplit ~/.dotfiles/vim/after/plugin/options.vim<cr>
 nnoremap <leader>et :vsplit ~/.dotfiles/vim/after/plugin/theme.vim<cr>
 
@@ -54,3 +56,22 @@ noremap <leader>aa <esc>ggVG
 
 " Toggle wrap
 nnoremap <leader>w :setlocal wrap!<cr>
+
+" Line up decimal points in Beancount
+if !empty(glob('~/.vim/vendor/vim-beancount'))
+  nnoremap <leader>ac :AlignCommodity<cr>
+  vnoremap <leader>ac :AlignCommodity<cr>
+endif
+
+" Sometimes I want to pull up the 'project drawer'
+nnoremap <leader>d :Vexplore<cr><c-w>H30<c-w><bar>
+
+" Toggle visibility of tab characters
+nnoremap <leader>t :set list!
+
+" Window navigation mappings
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+nnoremap <c-p> <c-w>p
