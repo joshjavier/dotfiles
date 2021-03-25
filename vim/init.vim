@@ -14,6 +14,7 @@ Plug 'rstacruz/vim-opinion'
 
 " COLOR SCHEMES: {{{
 Plug 'gruvbox-community/gruvbox'
+Plug 'romainl/Apprentice'
 
 " Very fast fuzzy finder
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }

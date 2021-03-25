@@ -1,5 +1,5 @@
 set background=dark
-silent! colorscheme gruvbox
+silent! colorscheme apprentice
 
 if !has('gui_running')
 
