@@ -11,6 +11,7 @@
       path: vim/after/*
     ~/.vimrc: vim/init.vim
     ~/.config/nvim/init.vim: vim/init.vim
+    ~/.config/kitty/kitty.conf:
 
 - shell:
   -
