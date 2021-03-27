@@ -54,7 +54,7 @@ vnoremap <leader>cc "+y
 noremap <leader>vv "+p
 noremap <leader>aa <esc>ggVG
 
-" Toggle wrap
+" Toggle [w]rap
 nnoremap <leader>w :setlocal wrap!<cr>
 
 " Line up decimal points in Beancount
@@ -63,11 +63,11 @@ if !empty(glob('~/.vim/vendor/vim-beancount'))
   vnoremap <leader>ac :AlignCommodity<cr>
 endif
 
-" Sometimes I want to pull up the 'project drawer'
+" Sometimes I want to pull up the 'project [d]rawer'
 nnoremap <leader>d :Vexplore<cr><c-w>H30<c-w><bar>
 
-" Toggle visibility of tab characters
-nnoremap <leader>t :set list!
+" Toggle visibility of [t]ab characters
+nnoremap <leader>t :setlocal list!<cr>
 
 " Window navigation mappings
 nnoremap <c-j> <c-w>j
@@ -75,3 +75,9 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 nnoremap <c-p> <c-w>p
+
+" Toggle distraction-free [W]riting mode
+nnoremap <leader>W :Goyo<cr>:setlocal wrap!<cr>:setlocal list!<cr>
+
+" Toggle fading [i]nactive paragraphs
+nnoremap <leader>i :Limelight!!<cr>

@@ -29,6 +29,10 @@ Plug 'tpope/vim-vinegar'
 " Asynchronous Lint Engine
 Plug 'w0rp/ale'
 
+" Distraction-free writing
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+
 " FILETYPE PLUGINS: {{{
 Plug 'nathangrigg/vim-beancount'
 
