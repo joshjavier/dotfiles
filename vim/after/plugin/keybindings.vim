@@ -14,8 +14,9 @@ inoremap jk <esc>
 inoremap kj <esc>
 vnoremap jk <esc>
 vnoremap kj <esc>
-" TODO: 2021-03-25 There's a slight delay when pressing j/k to move up/down
-" while in visual mode. Might wanna check the timeout option.
+" Adjust timeout to the sweet spot that reduces delay when moving with j/k in
+" visual mode while still having enough time to capture multi-key mappings.
+set timeoutlen=175
 
 " ctrl-s to save
 nnoremap <c-s> :w<cr>
