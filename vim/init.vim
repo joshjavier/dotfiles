@@ -12,7 +12,7 @@ call plug#begin('~/.vim/vendor')
 if !has('nvim') && !exists('g:gui_oni') | Plug 'tpope/vim-sensible' | endif
 Plug 'rstacruz/vim-opinion'
 
-" COLOR SCHEMES: {{{
+" Color schemes
 Plug 'gruvbox-community/gruvbox'
 Plug 'romainl/Apprentice'
 
@@ -33,7 +33,20 @@ Plug 'w0rp/ale'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 
-" FILETYPE PLUGINS: {{{
+" Intellisense engine for vim
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
+" Snippets (use with a snippet engine, e.g. coc-snippets)
+Plug 'honza/vim-snippets'
+
+" Git plugin for vim
+Plug 'tpope/vim-fugitive'
+
+" Autoclose parentheses (supports dot repeat)
+Plug 'cohama/lexima.vim'
+
+" Filetype plugins
 Plug 'nathangrigg/vim-beancount'
+Plug 'pangloss/vim-javascript'
 
 call plug#end()
