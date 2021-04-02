@@ -58,12 +58,6 @@ noremap <leader>aa <esc>ggVG
 " Toggle [w]rap
 nnoremap <leader>w :setlocal wrap!<cr>
 
-" Line up decimal points in Beancount
-if !empty(glob('~/.vim/vendor/vim-beancount'))
-  nnoremap <leader>ac :AlignCommodity<cr>
-  vnoremap <leader>ac :AlignCommodity<cr>
-endif
-
 " Sometimes I want to pull up the 'project [d]rawer'
 nnoremap <leader>d :Vexplore<cr><c-w>H30<c-w><bar>
 
