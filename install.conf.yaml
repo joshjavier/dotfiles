@@ -11,6 +11,8 @@
       path: vim/after/*
     ~/.vimrc: vim/init.vim
     ~/.config/nvim/init.vim: vim/init.vim
+    ~/.vim/coc-settings.json: vim/coc-settings.json
+    ~/.config/nvim/coc-settings.json: vim/coc-settings.json
     ~/.config/kitty/:
       glob: true
       path: kitty/*

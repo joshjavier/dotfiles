@@ -1,0 +1,7 @@
+{
+  // Prioritize snippets in autocomplete
+  "snippets.priority": 100,
+
+  // Use Ale for display diagnostics
+  "diagnostic.displayByAle": true
+}

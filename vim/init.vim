@@ -1,5 +1,8 @@
 let g:mapleader=" "
 
+" Let coc.nvim handle LSP features
+let g:ale_disable_lsp=1
+
 call plug#begin('~/.vim/vendor')
 
 " Good defaults
@@ -42,5 +45,13 @@ Plug 'cohama/lexima.vim'
 " Filetype plugins
 Plug 'nathangrigg/vim-beancount'
 Plug 'pangloss/vim-javascript'
+Plug 'kevinoid/vim-jsonc'
 
 call plug#end()
+
+let g:coc_global_extensions = [
+  \'coc-emmet',
+  \'coc-json',
+  \'coc-snippets',
+  \'coc-tsserver'
+  \]
