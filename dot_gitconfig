@@ -1,0 +1,16 @@
+[user]
+	name = Josh Javier
+	email = 46987872+joshjavier@users.noreply.github.com
+[core]
+	editor = nvim
+	excludesfile = /home/joshjavier/.gitignore_global
+[init]
+	defaultBranch = main
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	lol = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
