@@ -6,8 +6,16 @@ nvlsp.defaults()
 
 local servers = {
   html = {},
-  cssls = {},
+  cssls = {
+    settings = {
+      css = { lint = { unknownAtRules = "ignore" } },
+      scss = { lint = { unknownAtRules = "ignore" } },
+      less = { lint = { unknownAtRules = "ignore" } },
+    },
+  },
+  tailwindcss = {},
   ts_ls = {},
+  prismals = {},
   jsonls = {
     settings = {
       json = {
@@ -41,6 +49,7 @@ local servers = {
       },
     },
   },
+  ruff = {},
 }
 
 -- lsps with default config
