@@ -813,6 +813,9 @@ require('lazy').setup({
         },
       }
 
+      -- Add error styling to git commit overflow text
+      vim.api.nvim_set_hl(0, 'gitcommitOverflow', { link = 'Error' })
+
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
@@ -875,6 +878,8 @@ require('lazy').setup({
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
+        -- Use the built-in syntax highlighting for the following:
+        disable = { 'gitcommit' },
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
