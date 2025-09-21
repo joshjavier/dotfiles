@@ -615,6 +615,26 @@ require('lazy').setup({
             },
           },
         },
+
+        -- Web dev LSPs
+        html = {},
+        emmet_language_server = {},
+        css_variables = {
+          settings = {
+            cssVariables = {
+              lookupFiles = {
+                '**/*.css',
+                '**/*.scss',
+                '**/*.sass',
+                '**/*.less',
+                -- Add files containing CSS variable definitions here so the LSP can add them to autocompletion
+                'node_modules/@mantine/core/styles/default-css-variables.css',
+              },
+            },
+          },
+        },
+        cssmodules_ls = {},
+        cssls = {},
       }
 
       -- Ensure the servers and tools above are installed
