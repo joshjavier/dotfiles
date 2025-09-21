@@ -408,6 +408,9 @@ require('lazy').setup({
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
+
+      -- Provides the SchemaStore catalog for use with jsonls and yamlls.
+      'b0o/schemastore.nvim',
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -635,6 +638,15 @@ require('lazy').setup({
         },
         cssmodules_ls = {},
         cssls = {},
+        tailwindcss = {},
+        jsonls = {
+          settings = {
+            json = {
+              schemas = require('schemastore').json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        },
       }
 
       -- Ensure the servers and tools above are installed
