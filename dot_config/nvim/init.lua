@@ -653,6 +653,7 @@ require('lazy').setup({
             },
           },
         },
+        copilot = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -931,6 +932,90 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  },
+  'nvim-treesitter/nvim-treesitter-textobjects',
+
+  {
+    'folke/sidekick.nvim',
+    opts = {
+      -- add any options here
+      nes = { enabled = false },
+      -- cli = {
+      --   mux = {
+      --     backend = 'zellij',
+      --     enabled = true,
+      --   },
+      -- },
+    },
+    keys = {
+      {
+        '<tab>',
+        function()
+          -- if there is a next edit, jump to it, otherwise apply it if any
+          if not require('sidekick').nes_jump_or_apply() then
+            return '<Tab>' -- fallback to normal tab
+          end
+        end,
+        expr = true,
+        desc = 'Goto/Apply Next Edit Suggestion',
+      },
+      {
+        '<leader>aa',
+        function()
+          require('sidekick.cli').toggle()
+        end,
+        desc = 'Sidekick Toggle CLI',
+      },
+      {
+        '<leader>as',
+        function()
+          require('sidekick.cli').select()
+        end,
+        -- Or to select only installed tools:
+        -- require('sidekick.cli').select({ filter = { installed = true } })
+        desc = 'Select CLI',
+      },
+      {
+        '<leader>at',
+        function()
+          require('sidekick.cli').send { msg = '{this}' }
+        end,
+        mode = { 'x', 'n' },
+        desc = 'Send This',
+      },
+      {
+        '<leader>av',
+        function()
+          require('sidekick.cli').send { msg = '{selection}' }
+        end,
+        mode = { 'x' },
+        desc = 'Send Visual Selection',
+      },
+      {
+        '<leader>ap',
+        function()
+          require('sidekick.cli').prompt()
+        end,
+        mode = { 'n', 'x' },
+        desc = 'Sidekick Select Prompt',
+      },
+      {
+        '<c-.>',
+        function()
+          require('sidekick.cli').focus()
+        end,
+        mode = { 'n', 'x', 'i', 't' },
+        desc = 'Sidekick Switch Focus',
+      },
+      -- Example of a keybinding to open Claude directly
+      {
+        '<leader>ac',
+        function()
+          require('sidekick.cli').toggle { name = 'claude', focus = true }
+        end,
+        desc = 'Sidekick Toggle Claude',
+      },
+    },
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
