@@ -638,7 +638,13 @@ require('lazy').setup({
         },
         cssmodules_ls = {},
         cssls = {},
-        tailwindcss = {},
+        tailwindcss = {
+          settings = {
+            tailwindCSS = {
+              classFunctions = { 'cn', 'cva' },
+            },
+          },
+        },
         jsonls = {
           settings = {
             json = {
