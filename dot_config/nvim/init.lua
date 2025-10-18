@@ -80,6 +80,14 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Automatic filetype detection for yaml.docker-compose
+vim.filetype.add {
+  pattern = {
+    ['compose.*%.ya?ml'] = 'yaml.docker-compose',
+    ['docker%-compose.*%.ya?ml'] = 'yaml.docker-compose',
+  },
+}
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -654,6 +662,7 @@ require('lazy').setup({
           },
         },
         copilot = {},
+        docker_language_server = {},
       }
 
       -- Ensure the servers and tools above are installed
