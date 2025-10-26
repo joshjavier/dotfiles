@@ -664,6 +664,7 @@ require('lazy').setup({
         },
         copilot = {},
         docker_language_server = {},
+        prismals = {},
       }
 
       -- Ensure the servers and tools above are installed
