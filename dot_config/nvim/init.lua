@@ -235,6 +235,7 @@ require('lazy').setup({
         { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>u', group = '[U]I' },
+        { '<leader>a', group = '[A]I / Sidekick' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
         { 'gr', group = 'LSP Actions', mode = { 'n' } },
         { 'ga', group = 'LSP Calls', mode = { 'n' } },
@@ -431,6 +432,7 @@ require('lazy').setup({
         cssls = {},
         cssmodules_ls = {},
         oxlint = {},
+        copilot = {},
       }
 
       -- Ensure the servers and tools above are installed

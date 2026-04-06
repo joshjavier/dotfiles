@@ -18,7 +18,19 @@ return {
     -- Only the picker and input are enabled for now.
     -- To try other snacks modules later (dashboard, indent, scoll, etc.)
     -- just add them here with `enabled = true`.
-    picker = { enabled = true },
+    picker = {
+      enabled = true,
+      actions = {
+        sidekick_send = function(...) return require('sidekick.cli.picker.snacks').send(...) end,
+      },
+      win = {
+        input = {
+          keys = {
+            ['<a-a>'] = { 'sidekick_send', mode = { 'n', 'i' } },
+          },
+        },
+      },
+    },
     input = { enabled = true },
   },
   keys = {
