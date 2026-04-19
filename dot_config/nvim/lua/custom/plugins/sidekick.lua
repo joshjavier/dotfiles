@@ -16,16 +16,16 @@ return {
   },
   keys = {
     -- NES: jump to next edit, or apply if already on one
-    {
-      '<tab>',
-      function()
-        if require('sidekick').nes_jump_or_apply() then return end
-        return '<tab>' -- fall back to normal tab
-      end,
-      mode = { 'i', 'n' },
-      expr = true,
-      desc = 'Goto/Apply Next Edit Suggestion',
-    },
+    -- {
+    --   '<tab>',
+    --   function()
+    --     if require('sidekick').nes_jump_or_apply() then return end
+    --     return '<tab>' -- fall back to normal tab
+    --   end,
+    --   mode = { 'i', 'n' },
+    --   expr = true,
+    --   desc = 'Goto/Apply Next Edit Suggestion',
+    -- },
 
     -- CLI window management
     { '<c-.>', function() require('sidekick.cli').focus() end, mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Focus' },
@@ -50,6 +50,6 @@ return {
       end,
       desc = 'Fi[x] Diagnostics in Function',
     },
-    { '<leader>ap', function() require('sidekick.cli').prompt() end, desc = 'Sidekick Select [P]rompt' },
+    { '<leader>ap', function() require('sidekick.cli').prompt() end, mode = { 'n', 'x' }, desc = 'Sidekick Select [P]rompt' },
   },
 }
