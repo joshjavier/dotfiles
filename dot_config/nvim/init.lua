@@ -445,6 +445,7 @@ require('lazy').setup({
         cssls = {},
         cssmodules_ls = {},
         oxlint = {},
+        oxfmt = {},
         copilot = {},
       }
 
@@ -458,7 +459,6 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         -- You can add other tools here that you want Mason to install
-        'oxfmt', -- fast JavaScript formatter
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -491,6 +491,23 @@ require('lazy').setup({
         local enabled_filetypes = {
           lua = true,
           python = true,
+          javascript = true,
+          javascriptreact = true,
+          typescript = true,
+          typescriptreact = true,
+          toml = true,
+          json = true,
+          jsonc = true,
+          json5 = true,
+          yaml = true,
+          html = true,
+          vue = true,
+          handlebars = true,
+          css = true,
+          scss = true,
+          less = true,
+          graphql = true,
+          markdown = true,
         }
         if enabled_filetypes[vim.bo[bufnr].filetype] then
           return { timeout_ms = 500 }
@@ -509,12 +526,6 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { 'oxfmt' },
-        javascriptreact = { 'oxfmt' },
-        typescript = { 'oxfmt' },
-        typescriptreact = { 'oxfmt' },
-        json = { 'oxfmt' },
-        vue = { 'oxfmt' },
         html = { 'biome' },
         markdown = { 'mdslw' },
       },
