@@ -8,7 +8,7 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
--- See `:help vim.o`
+--  See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
@@ -86,7 +86,7 @@ vim.o.confirm = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic Config & Keymaps
--- See :help vim.diagnostic.Opts
+-- See `:help vim.diagnostic.Opts`
 vim.diagnostic.config {
   update_in_insert = false,
   severity_sort = true,
@@ -144,6 +144,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
+-- [[ Custom filetypes ]]
+require 'custom.filetypes'
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -186,8 +189,9 @@ require('lazy').setup({
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`.
   --
-  -- See `:help gitsigns` to understand what the configuration keys do
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
+  -- See `:help gitsigns` to understand what each configuration key does.
+  -- Adds git related signs to the gutter, as well as utilities for managing changes
+  {
     'lewis6991/gitsigns.nvim',
     ---@module 'gitsigns'
     ---@type Gitsigns.Config
@@ -216,15 +220,16 @@ require('lazy').setup({
   --
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
-
-  { -- Useful plugin to show you pending keybinds.
+  --
+  -- Useful plugin to show you pending keybinds.
+  {
     'folke/which-key.nvim',
     event = 'VimEnter',
     ---@module 'which-key'
     ---@type wk.Opts
     ---@diagnostic disable-next-line: missing-fields
     opts = {
-      -- delay between pressing a key and opening which-key (milliseconds)
+      -- Delay between pressing a key and opening which-key (milliseconds)
       delay = 0,
       icons = { mappings = vim.g.have_nerd_font },
 
@@ -270,7 +275,8 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      -- Replaced by LspProgress autocmd in lua/custom/plugins/snacks.lua
+      -- { 'j-hui/fidget.nvim', opts = {} },
 
       -- Provides the SchemaStore catalog for use with jsonls and yamlls.
       'b0o/schemastore.nvim',
@@ -382,6 +388,9 @@ require('lazy').setup({
       --  See `:help lsp-config` for information about keys and how to configure
       ---@type table<string, vim.lsp.Config>
       local servers = {
+        bashls = {
+          filetypes = { 'bash', 'sh', 'zsh' },
+        },
         clangd = {},
         gopls = {},
         pyright = {},
@@ -392,6 +401,7 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {},
+        eslint = {},
 
         stylua = {},
 
@@ -438,7 +448,39 @@ require('lazy').setup({
             },
           },
         },
+        yamlls = {
+          settings = {
+            yaml = {
+              schemaStore = {
+                -- Disable the built-in schemaStore so that SchemaStore.nvim can
+                -- manage schema fetching instead. Required to use SchemaStore.nvim's
+                -- advanced options (e.g. `select`, `ignore`, `extra`).
+                enable = false,
+                -- Prevent a TypeError in yaml-language-server that occurs when
+                -- `url` is undefined while `enable` is false.
+                url = '',
+              },
+              schemas = vim.tbl_extend('force', require('schemastore').yaml.schemas(), {
+                -- Map the local tmuxp workspace JSON Schema to any YAML file that
+                -- looks like a tmuxp workspace. Patterns cover:
+                --   .tmuxp.yaml / .tmuxp.yml  → project-root workspace files
+                --   **/.tmuxp/*.yaml|yml      → $HOME/.tmuxp/
+                --   **/tmuxp/*.yaml|yml       → $HOME/.config/tmuxp/
+                [vim.fn.stdpath 'config' .. '/schemas/tmuxp-workspace.schema.json'] = {
+                  '.tmuxp.yaml',
+                  '.tmuxp.yml',
+                  '**/.tmuxp/*.yaml',
+                  '**/.tmuxp/*.yml',
+                  '**/tmuxp/*.yaml',
+                  '**/tmuxp/*.yml',
+                },
+              }),
+            },
+          },
+        },
+        tombi = {},
         html = {},
+        biome = {},
         emmet_language_server = {},
         tailwindcss = {},
         css_variables = {},
@@ -447,6 +489,16 @@ require('lazy').setup({
         oxlint = {},
         oxfmt = {},
         copilot = {},
+        docker_language_server = {
+          init_options = {
+            dockerfileExperimental = {
+              removeOverlappingIssues = true,
+            },
+            telemetry = 'off',
+          },
+        },
+        dockerls = {},
+        gitlab_ci_ls = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -459,6 +511,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         -- You can add other tools here that you want Mason to install
+        'prettier',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -470,7 +523,8 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat
+  -- Autoformat
+  {
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
@@ -499,7 +553,7 @@ require('lazy').setup({
           json = true,
           jsonc = true,
           json5 = true,
-          yaml = true,
+          -- yaml = true,
           html = true,
           vue = true,
           handlebars = true,
@@ -522,20 +576,47 @@ require('lazy').setup({
       formatters_by_ft = {
         -- rust = { 'rustfmt' },
         sh = { 'shfmt' },
+        zsh = { 'shfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         html = { 'biome' },
-        markdown = { 'mdslw' },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        javascript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        json = { 'prettier' },
+        css = { 'prettier' },
+        markdown = { 'prettier' },
+        -- markdown = { 'mdslw' },
       },
       formatters = {
         mdslw = { prepend_args = { '--stdin-filepath', '$FILENAME' } },
+        prettier = {
+          condition = function(_, ctx)
+            local configs = {
+              '.prettierrc',
+              '.prettierrc.json',
+              '.prettierrc.yaml',
+              '.prettierrc.yml',
+              '.prettierrc.js',
+              '.prettierrc.cjs',
+              '.prettierrc.mjs',
+              '.prettierrc.toml',
+              'prettier.config.js',
+              'prettier.config.cjs',
+              'prettier.config.mjs',
+            }
+            return vim.fs.find(configs, { upward = true, path = ctx.dirname })[1] ~= nil
+          end,
+        },
       },
     },
   },
 
-  { -- Autocompletion
+  -- Autocompletion
+  {
     'saghen/blink.cmp',
     event = 'VimEnter',
     version = '1.*',
@@ -587,7 +668,7 @@ require('lazy').setup({
         -- <c-e>: Hide menu
         -- <c-k>: Toggle signature help
         --
-        -- See :h blink-cmp-config-keymap for defining your own keymap
+        -- See `:help blink-cmp-config-keymap` for defining your own keymap
         preset = 'default',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
@@ -618,7 +699,7 @@ require('lazy').setup({
       -- By default, we use the Lua implementation instead, but you may enable
       -- the rust implementation via `'prefer_rust_with_warning'`
       --
-      -- See :h blink-cmp-config-fuzzy for more information
+      -- See `:help blink-cmp-config-fuzzy` for more information
       fuzzy = { implementation = 'prefer_rust_with_warning' },
 
       -- Shows a signature help window while you type arguments for a function
@@ -626,7 +707,8 @@ require('lazy').setup({
     },
   },
 
-  { -- You can easily change to a different colorscheme.
+  {
+    -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
     --
@@ -661,16 +743,24 @@ require('lazy').setup({
     opts = { signs = false },
   },
 
-  { -- Collection of various small independent plugins/modules
+  -- Collection of various small independent plugins/modules
+  {
     'nvim-mini/mini.nvim',
     config = function()
       -- Better Around/Inside textobjects
       --
       -- Examples:
       --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
+      --  - yiiq - [Y]ank [I]nside [I]+ [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
-      require('mini.ai').setup { n_lines = 500 }
+      require('mini.ai').setup {
+        -- NOTE: Avoid conflicts with the built-in incremental selection mappings on Neovim>=0.12 (see `:help treesitter-incremental-selection`)
+        mappings = {
+          around_next = 'aa',
+          inside_next = 'ii',
+        },
+        n_lines = 500,
+      }
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
@@ -683,7 +773,7 @@ require('lazy').setup({
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
+      -- Set `use_icons` to true if you have a Nerd Font
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
       -- You can configure sections in the statusline by overriding their
@@ -697,35 +787,36 @@ require('lazy').setup({
     end,
   },
 
-  { -- Highlight, edit, and navigate code
+  -- Used to highlight, edit, and navigate code
+  {
     'nvim-treesitter/nvim-treesitter',
     lazy = false,
     build = ':TSUpdate',
     branch = 'main',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
-      -- ensure basic parser are installed
+      -- Ensure basic parsers are installed
       local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
       require('nvim-treesitter').install(parsers)
 
       ---@param buf integer
       ---@param language string
       local function treesitter_try_attach(buf, language)
-        -- check if parser exists and load it
+        -- Check if parser exists and load it
         if not vim.treesitter.language.add(language) then return end
-        -- enables syntax highlighting and other treesitter features
+        -- Enable syntax highlighting and other treesitter features
         vim.treesitter.start(buf, language)
 
-        -- enables treesitter based folds
-        -- for more info on folds see `:help folds`
+        -- Enable treesitter based folds
+        -- For more info on folds see `:help folds`
         -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
         -- vim.wo.foldmethod = 'expr'
 
-        -- check if treesitter indentation is available for this language, and if so enable it
+        -- Check if treesitter indentation is available for this language, and if so enable it
         -- in case there is no indent query, the indentexpr will fallback to vim's built-in one
         local has_indent_query = vim.treesitter.query.get(language, 'indents') ~= nil
 
-        -- enables treesitter based indentation
+        -- Enable treesitter based indentation
         if has_indent_query then vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()" end
       end
 
@@ -740,13 +831,13 @@ require('lazy').setup({
           local installed_parsers = require('nvim-treesitter').get_installed 'parsers'
 
           if vim.tbl_contains(installed_parsers, language) then
-            -- enable the parser if it is installed
+            -- Enable the parser if it is already installed
             treesitter_try_attach(buf, language)
           elseif vim.tbl_contains(available_parsers, language) then
-            -- if a parser is available in `nvim-treesitter` auto install it, and enable it after the installation is done
+            -- If a parser is available in `nvim-treesitter`, auto install it and enable it after the installation is done
             require('nvim-treesitter').install(language):await(function() treesitter_try_attach(buf, language) end)
           else
-            -- try to enable treesitter features in case the parser exists but is not available from `nvim-treesitter`
+            -- Try to enable treesitter features in case the parser exists but is not available from `nvim-treesitter`
             treesitter_try_attach(buf, language)
           end
         end,

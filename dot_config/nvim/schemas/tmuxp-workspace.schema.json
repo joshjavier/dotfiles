@@ -1,0 +1,309 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "tmuxp-workspace",
+	"title": "tmuxp Workspace",
+	"description": "Schema for tmuxp workspace files (.tmuxp.yaml / .tmuxp.json). See https://tmuxp.git-pull.com/configuration/",
+	"type": "object",
+	"required": [
+		"session_name",
+		"windows"
+	],
+	"properties": {
+		"session_name": {
+			"type": "string",
+			"description": "Name of the tmux session. Used for session creation and detecting existing sessions. Supports ${ENV_VAR} substitution."
+		},
+		"start_directory": {
+			"type": "string",
+			"description": "Default working directory for the session. Relative paths are relative to the workspace file location. Supports ${ENV_VAR} substitution."
+		},
+		"before_script": {
+			"type": "string",
+			"description": "Path to a script to run before building the session. Must be executable (chmod +x). A non-zero exit code aborts session creation. CWDs into the session-level start_directory. Supports ${ENV_VAR} substitution."
+		},
+		"shell_command_before": {
+			"$ref": "#/$defs/shell_command_before",
+			"description": "Command(s) run before each pane's shell_command in all windows. Supports ${ENV_VAR} substitution."
+		},
+		"suppress_history": {
+			"type": "boolean",
+			"description": "When true (default), shell commands are prefixed with a space to suppress them from shell history (requires HISTCONTROL=ignorespace for bash, HIST_IGNORE_SPACE for zsh). Set false to allow commands into history."
+		},
+		"environment": {
+			"$ref": "#/$defs/environment_map",
+			"description": "Environment variables to set for the session. Supports ${ENV_VAR} substitution in values."
+		},
+		"global_options": {
+			"type": "object",
+			"description": "Server-wide tmux options (e.g. default-shell, default-command). Supports ${ENV_VAR} substitution in values.",
+			"additionalProperties": {
+				"type": [
+					"string",
+					"boolean",
+					"integer",
+					"number"
+				]
+			}
+		},
+		"options": {
+			"type": "object",
+			"description": "Session-level tmux options (e.g. main-pane-height). Supports ${ENV_VAR} substitution in values.",
+			"additionalProperties": {
+				"type": [
+					"string",
+					"boolean",
+					"integer",
+					"number"
+				]
+			}
+		},
+		"plugins": {
+			"type": "array",
+			"description": "List of tmuxp plugin module names to load.",
+			"items": {
+				"type": "string"
+			}
+		},
+		"windows": {
+			"type": "array",
+			"description": "Ordered list of windows to create in the session.",
+			"minItems": 1,
+			"items": {
+				"$ref": "#/$defs/window"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"$defs": {
+		"environment_map": {
+			"type": "object",
+			"description": "Key/value pairs of environment variable names and their string values.",
+			"additionalProperties": {
+				"type": "string"
+			}
+		},
+		"shell_command_before": {
+			"description": "One or more shell commands to run before the pane's main commands. Can be a single string, a list of strings, or a list of command objects.",
+			"oneOf": [
+				{
+					"type": "string",
+					"description": "A single shell command string."
+				},
+				{
+					"type": "array",
+					"items": {
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"$ref": "#/$defs/command_object"
+							}
+						]
+					}
+				}
+			]
+		},
+		"command_object": {
+			"type": "object",
+			"description": "A command with optional execution control.",
+			"required": [
+				"cmd"
+			],
+			"properties": {
+				"cmd": {
+					"type": "string",
+					"description": "The shell command to send to the pane."
+				},
+				"enter": {
+					"type": "boolean",
+					"description": "Whether to send Enter after the command. Default true. Set false to type the command without executing it (experimental, added in 1.10.0)."
+				},
+				"sleep_before": {
+					"type": "number",
+					"description": "Seconds to wait before sending this command (experimental, added in 1.10.0). Blocking.",
+					"minimum": 0
+				},
+				"sleep_after": {
+					"type": "number",
+					"description": "Seconds to wait after sending this command (experimental, added in 1.10.0). Blocking.",
+					"minimum": 0
+				}
+			},
+			"additionalProperties": false
+		},
+		"shell_command_value": {
+			"description": "The shell_command for a pane. Can be a single string, a list of strings/command-objects, or null for a blank pane.",
+			"oneOf": [
+				{
+					"type": "string",
+					"description": "A single shell command string. An empty string sends a carriage return."
+				},
+				{
+					"type": "null",
+					"description": "No command; opens a blank pane."
+				},
+				{
+					"type": "array",
+					"description": "A sequence of commands to send in order.",
+					"items": {
+						"oneOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							},
+							{
+								"$ref": "#/$defs/command_object"
+							}
+						]
+					}
+				}
+			]
+		},
+		"pane": {
+			"description": "A pane inside a window. Can be a blank/shorthand value or a full pane object.",
+			"oneOf": [
+				{
+					"description": "Shorthand: a bare shell command string, or one of the blank-pane sentinels ('pane', 'blank', '') or null.",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"type": "object",
+					"description": "Full pane configuration object.",
+					"properties": {
+						"shell_command": {
+							"$ref": "#/$defs/shell_command_value",
+							"description": "Command(s) to run in this pane."
+						},
+						"shell": {
+							"type": "string",
+							"description": "Path to the shell or application to start for this pane (e.g. /usr/bin/python3). Overrides the window-level window_shell for this pane."
+						},
+						"start_directory": {
+							"type": "string",
+							"description": "Working directory for this pane. Relative paths are appended to the session-level start_directory if not absolute."
+						},
+						"focus": {
+							"type": "boolean",
+							"description": "If true, this pane will be focused (selected) when the window is first shown."
+						},
+						"suppress_history": {
+							"type": "boolean",
+							"description": "Override the session/window suppress_history setting for this pane."
+						},
+						"enter": {
+							"type": "boolean",
+							"description": "Whether to send Enter after all shell_command entries. Default true. Set false to skip Enter for the whole pane (experimental, added in 1.10.0)."
+						},
+						"sleep_before": {
+							"type": "number",
+							"description": "Seconds to wait before sending any commands to this pane (experimental, added in 1.10.0). Blocking.",
+							"minimum": 0
+						},
+						"sleep_after": {
+							"type": "number",
+							"description": "Seconds to wait after sending all commands to this pane (experimental, added in 1.10.0). Blocking.",
+							"minimum": 0
+						},
+						"environment": {
+							"$ref": "#/$defs/environment_map",
+							"description": "Environment variables to set for this pane. Requires tmuxp >= 1.19."
+						}
+					},
+					"additionalProperties": false
+				}
+			]
+		},
+		"window": {
+			"type": "object",
+			"description": "A tmux window configuration.",
+			"required": [
+				"panes"
+			],
+			"properties": {
+				"window_name": {
+					"type": "string",
+					"description": "Name of the window. Supports ${ENV_VAR} substitution."
+				},
+				"layout": {
+					"type": "string",
+					"description": "tmux layout for this window. Standard values: even-horizontal, even-vertical, main-horizontal, main-vertical, tiled. Custom layout strings are also accepted.",
+					"examples": [
+						"even-horizontal",
+						"even-vertical",
+						"main-horizontal",
+						"main-vertical",
+						"tiled"
+					]
+				},
+				"panes": {
+					"type": "array",
+					"description": "List of panes to create in this window.",
+					"minItems": 1,
+					"items": {
+						"$ref": "#/$defs/pane"
+					}
+				},
+				"start_directory": {
+					"type": "string",
+					"description": "Working directory for all panes in this window. A relative path is appended to the session-level start_directory. An absolute path takes full precedence."
+				},
+				"focus": {
+					"type": "boolean",
+					"description": "If true, this window will be the active window after the session loads."
+				},
+				"window_index": {
+					"type": "integer",
+					"description": "Explicit tmux window index to assign. Windows without this field are assigned the lowest available index.",
+					"minimum": 0
+				},
+				"window_shell": {
+					"type": "string",
+					"description": "Shell or application to start for all panes in this window (e.g. /usr/bin/python2). Can be overridden per-pane with pane-level shell."
+				},
+				"shell_command_before": {
+					"$ref": "#/$defs/shell_command_before",
+					"description": "Commands to run before each pane's shell_command in this window. Supports ${ENV_VAR} substitution."
+				},
+				"suppress_history": {
+					"type": "boolean",
+					"description": "Override the session-level suppress_history setting for all panes in this window."
+				},
+				"options": {
+					"type": "object",
+					"description": "tmux window options to set before panes are created (e.g. automatic-rename, main-pane-height). Supports ${ENV_VAR} substitution in values.",
+					"additionalProperties": {
+						"type": [
+							"string",
+							"boolean",
+							"integer",
+							"number"
+						]
+					}
+				},
+				"options_after": {
+					"type": "object",
+					"description": "tmux window options to set after all panes are created. Useful for synchronize-panes which should be enabled after individual pane commands have run.",
+					"additionalProperties": {
+						"type": [
+							"string",
+							"boolean",
+							"integer",
+							"number"
+						]
+					}
+				},
+				"environment": {
+					"$ref": "#/$defs/environment_map",
+					"description": "Environment variables to set for all panes in this window. Requires tmuxp >= 1.19."
+				}
+			},
+			"additionalProperties": false
+		}
+	}
+}
