@@ -14,9 +14,6 @@
 -- https://github.com/lbrayner/vim-rzip
 -- https://yarnpkg.com/getting-started/editor-sdks#neovim-native-lsp
 
----@module 'lazy'
----@type LazySpec
-return {
-  'lbrayner/vim-rzip',
-  lazy = false, -- must load at startup so BufReadCmd autocmds are registered before any file is opened
-}
+-- vim.pack loads start packages eagerly via packloadall, so BufReadCmd autocmds
+-- are registered before any file is opened. No special config needed.
+vim.pack.add { 'https://github.com/lbrayner/vim-rzip' }
