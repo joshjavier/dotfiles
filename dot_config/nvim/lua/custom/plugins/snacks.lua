@@ -123,11 +123,10 @@ vim.keymap.set('n', '<leader>un', function() Snacks.notifier.hide() end, { desc 
 vim.keymap.set('n', '<leader>n', function() Snacks.notifier.show_history() end, { desc = 'Notification History' })
 
 -- LSP
--- NOTE: gd/grr/gri/grt intentionally use the gr* prefix to stay consistent
--- with the existing grn (rename), gra (code action), grD (declaration) bindings
--- in the LSP config below, and to avoid colliding with git keymaps on <leader>g*.
-vim.keymap.set('n', 'grd', function() Snacks.picker.lsp_definitions() end, { nowait = true, desc = 'Goto Definition' })
-vim.keymap.set('n', 'grr', function() Snacks.picker.lsp_references() end, { nowait = true, desc = 'References' })
+-- grr/gri/grt override Neovim's default LSP keymaps to use the Snacks picker
+-- instead of the built-in quickfix handler. grd is an addition (no Neovim default).
+vim.keymap.set('n', 'grd', function() Snacks.picker.lsp_definitions() end, { desc = 'Goto Definition' })
+vim.keymap.set('n', 'grr', function() Snacks.picker.lsp_references() end, { desc = 'References' })
 vim.keymap.set('n', 'gri', function() Snacks.picker.lsp_implementations() end, { desc = 'Goto Implementation' })
 vim.keymap.set('n', 'grt', function() Snacks.picker.lsp_type_definitions() end, { desc = 'Goto Type Definition' })
 vim.keymap.set('n', 'gai', function() Snacks.picker.lsp_incoming_calls() end, { desc = 'Calls Incoming' })
