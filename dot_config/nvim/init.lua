@@ -553,9 +553,7 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    bashls = {
-      filetypes = { 'bash', 'sh', 'zsh' },
-    },
+    shuck = {},
     clangd = {},
     gopls = {},
     pyright = {},
@@ -741,8 +739,6 @@ do
     -- You can also specify external formatters in here.
     formatters_by_ft = {
       -- rust = { 'rustfmt' },
-      sh = { 'shfmt' },
-      zsh = { 'shfmt' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
