@@ -544,14 +544,6 @@ do
       if client and client:supports_method('textDocument/inlayHint', event.buf) then
         map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
       end
-
-      -- Enable `:help lsp-inline-completion` to receive suggestions from the Copilot Language Server
-      if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, event.buf) then
-        vim.lsp.inline_completion.enable(true, { bufnr = event.buf })
-
-        map('<C-F>', vim.lsp.inline_completion.get, 'accept inline completion', 'i')
-        map('<C-G>', vim.lsp.inline_completion.select, 'switch inline completion', 'i')
-      end
     end,
   })
 
@@ -656,7 +648,6 @@ do
     cssmodules_ls = {},
     oxlint = {},
     oxfmt = {},
-    copilot = {},
     docker_language_server = {
       init_options = {
         dockerfileExperimental = {
