@@ -165,9 +165,6 @@ do
     group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
     callback = function() vim.hl.on_yank() end,
   })
-
-  -- [[ Custom filetypes ]]
-  require 'custom.filetypes'
 end
 
 -- ============================================================
@@ -545,6 +542,11 @@ do
       end
     end,
   })
+
+  -- [[ Custom filetypes ]]
+  --  Compound filetypes (e.g. `yaml.gitlab`) so the servers below can attach.
+  --  They also apply outside LSP; treesitter and ftplugins still treat them as yaml.
+  require 'custom.filetypes'
 
   -- Enable the following language servers
   --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
