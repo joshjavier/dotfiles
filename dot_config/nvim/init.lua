@@ -422,7 +422,7 @@ end
 -- caches modules, so that loop won't load it a second time.
 --
 -- That file also enables snacks' input, notifier (plus an LspProgress
--- autocmd that replaces fidget.nvim, see Section 6) and lazygit modules.
+-- autocmd that replaces upstream's fidget.nvim) and lazygit modules.
 -- Loading it here means the notifier takes over `vim.notify` before the
 -- remaining sections run.
 --
@@ -479,10 +479,7 @@ do
   -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
   -- and elegantly composed help section, `:help lsp-vs-treesitter`
 
-  -- Useful status updates for LSP.
-  -- Replaced by LspProgress autocmd in lua/custom/plugins/snacks.lua
-  -- vim.pack.add { gh 'j-hui/fidget.nvim' }
-  -- require('fidget').setup {}
+  -- NOTE: Upstream's fidget.nvim is replaced by an LspProgress autocmd in snacks.lua.
 
   -- Provides the SchemaStore catalog for use with jsonls and yamlls.
   vim.pack.add { gh 'b0o/SchemaStore.nvim' }
