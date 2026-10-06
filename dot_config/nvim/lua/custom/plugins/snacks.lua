@@ -72,6 +72,7 @@ vim.keymap.set('n', '<leader><space>', function() Snacks.picker.smart() end, { d
 vim.keymap.set('n', '<leader>,', function() Snacks.picker.buffers() end, { desc = 'Buffers' })
 vim.keymap.set('n', '<leader>/', function() Snacks.picker.grep() end, { desc = 'Grep' })
 vim.keymap.set('n', '<leader>:', function() Snacks.picker.command_history() end, { desc = 'Command History' })
+vim.keymap.set('n', '<leader>n', function() Snacks.picker.notifications() end, { desc = 'Notification History' })
 
 -- find
 vim.keymap.set('n', '<leader>fb', function() Snacks.picker.buffers() end, { desc = 'Buffers' })
@@ -120,12 +121,12 @@ vim.keymap.set('n', '<leader>sR', function() Snacks.picker.resume() end, { desc 
 vim.keymap.set('n', '<leader>su', function() Snacks.picker.undo() end, { desc = 'Undo History' })
 vim.keymap.set('n', '<leader>uC', function() Snacks.picker.colorschemes() end, { desc = 'Colorschemes' })
 vim.keymap.set('n', '<leader>un', function() Snacks.notifier.hide() end, { desc = 'Dismiss Notifications' })
-vim.keymap.set('n', '<leader>n', function() Snacks.notifier.show_history() end, { desc = 'Notification History' })
 
 -- LSP
 -- grr/gri/grt override Neovim's default LSP keymaps to use the Snacks picker
--- instead of the built-in quickfix handler. grd is an addition (no Neovim default).
+-- instead of the built-in quickfix handler. grd/grD are additions (no Neovim default).
 vim.keymap.set('n', 'grd', function() Snacks.picker.lsp_definitions() end, { desc = 'Goto Definition' })
+vim.keymap.set('n', 'grD', function() Snacks.picker.lsp_declarations() end, { desc = 'Goto Declaration' })
 vim.keymap.set('n', 'grr', function() Snacks.picker.lsp_references() end, { desc = 'References' })
 vim.keymap.set('n', 'gri', function() Snacks.picker.lsp_implementations() end, { desc = 'Goto Implementation' })
 vim.keymap.set('n', 'grt', function() Snacks.picker.lsp_type_definitions() end, { desc = 'Goto Type Definition' })

@@ -415,11 +415,16 @@ end
 -- ============================================================
 
 -- NOTE: Upstream kickstart configures Telescope here. This config replaces it
--- with the snacks.nvim picker, which lives in `lua/custom/plugins/snacks.lua`
--- and is loaded by `require 'custom.plugins'` in Section 10.
+-- with the snacks.nvim picker, configured in `lua/custom/plugins/snacks.lua`.
+--
+-- It's required explicitly here so it loads at this point rather than in
+-- Section 10, where `custom.plugins` loads files in unspecified order. `require`
+-- caches modules, so that loop won't load it a second time.
 --
 -- That file also enables snacks' input, notifier (plus an LspProgress
 -- autocmd that replaces fidget.nvim, see Section 6) and lazygit modules.
+-- Loading it here means the notifier takes over `vim.notify` before the
+-- remaining sections run.
 --
 -- Keymaps follow the snacks.nvim README rather than kickstart, so some
 -- muscle memory changes:
@@ -433,11 +438,15 @@ end
 --   <leader>s/        grep open files      <leader>sB  (<leader>s/ is now search history)
 --   <leader>ss        select picker        <leader>ss is now LSP document symbols
 --
--- The LSP pickers (grr, gri, grd, grt, gO, gW) are set globally in snacks.lua
--- instead of buffer-locally on LspAttach as upstream does.
+-- The LSP pickers (grd, grD, grr, gri, grt, gO, gW) are set globally in
+-- snacks.lua instead of buffer-locally on LspAttach as upstream does. Most
+-- follow Neovim's `gr` prefix convention (`:help lsp-defaults`) rather than
+-- the snacks README (gd, gD, gr, gI, gy), which would shadow built-in Vim
+-- commands and conflict with the default `grn`/`gra`/`grx` keymaps.
 --
 -- Use `<leader>sk` to search all keymaps, or `:lua Snacks.picker()` to browse
 -- every available picker.
+require 'custom.plugins.snacks'
 
 -- ============================================================
 -- SECTION 6: LSP
@@ -496,17 +505,10 @@ do
         vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
       end
 
-      -- Rename the variable under your cursor.
-      --  Most Language Servers support renaming across files, etc.
-      map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
-
-      -- Execute a code action, usually your cursor needs to be on top of an error
-      -- or a suggestion from your LSP for this to activate.
-      map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-
-      -- WARN: This is not Goto Definition, this is Goto Declaration.
-      --  For example, in C this would take you to the header.
-      map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+      -- NOTE: Upstream kickstart maps `grn` (rename), `gra` (code action) and
+      -- `grD` (declaration) here. `grn` and `gra` are already Neovim defaults
+      -- (see `:help lsp-defaults`), and `grD` moved to the Snacks picker in
+      -- `lua/custom/plugins/snacks.lua` alongside the other LSP pickers.
 
       -- The following two autocommands are used to highlight references of the
       -- word under your cursor when your cursor rests there for a little while.
