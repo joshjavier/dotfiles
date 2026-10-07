@@ -557,7 +557,17 @@ do
     clangd = {},
     gopls = {},
     pyright = {},
-    tsc = {},
+    tsc = {
+      settings = {
+        ['js/ts'] = {
+          preferences = {
+            -- Don't auto-import from barrel files like `@mui/material`.
+            -- See https://mui.com/material-ui/guides/minimizing-bundle-size/#avoid-barrel-imports
+            autoImportSpecifierExcludeRegexes = { '^@mui/[^/]+$' },
+          },
+        },
+      },
+    },
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
     --    https://github.com/mrcjkb/rustaceanvim
