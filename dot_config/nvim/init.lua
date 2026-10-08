@@ -553,7 +553,17 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    shuck = {},
+    shuck = {
+      -- Neovim has no `bash` filetype: bash files (.bashrc, .bash_profile, etc.)
+      -- get `sh` with b:is_bash set. shuck picks its dialect from the languageId,
+      -- so without this it parses them as POSIX sh and `[[ ]]` breaks the parse
+      -- (bogus C016 "no matching opener" errors). zsh has its own filetype, so
+      -- it needs no mapping.
+      get_language_id = function(bufnr, filetype)
+        if filetype == 'sh' and vim.b[bufnr].is_bash then return 'bash' end
+        return filetype
+      end,
+    },
     clangd = {},
     gopls = {},
     pyright = {},
